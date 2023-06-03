@@ -1,12 +1,16 @@
 package ventanas;
+
 import clases.Conexion;
+import java.awt.Color;
 import java.awt.Image;
 import java.sql.*;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 public class RegistrarUsuarios extends javax.swing.JFrame {
+
     String user;
     
     public RegistrarUsuarios() {
@@ -14,7 +18,7 @@ public class RegistrarUsuarios extends javax.swing.JFrame {
         user = Login.user;
         
         setTitle("Registrar nuevo usuario - Sesión de " + user);
-        setSize(630,350);
+        setSize(630, 350);
         setResizable(false);
         setLocationRelativeTo(null);
         
@@ -28,7 +32,7 @@ public class RegistrarUsuarios extends javax.swing.JFrame {
     }
     
     @Override
-    public Image getIconImage(){
+    public Image getIconImage() {
         Image retValue = getToolkit().getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/icon.png"));
         return retValue;
     }
@@ -137,6 +141,11 @@ public class RegistrarUsuarios extends javax.swing.JFrame {
         getContentPane().add(cmb_niveles, new org.netbeans.lib.awtextra.AbsoluteConstraints(20, 250, -1, -1));
 
         jButton1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/add.png"))); // NOI18N
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 170, 120, 100));
 
         jLabel_footer.setText("Creado por ChrisferDev");
@@ -145,6 +154,107 @@ public class RegistrarUsuarios extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        int permisos_cmb, validacion = 0;
+        String nombre, mail, telefono, username, pass, permisos_string = "";
+        
+        mail = txt_mail.getText().trim();
+        username = txt_username.getText().trim();
+        pass = txt_password.getText().trim();
+        nombre = txt_nombre.getText().trim();
+        telefono = txt_télefono.getText().trim();
+        permisos_cmb = cmb_niveles.getSelectedIndex() + 1;
+        
+        if (mail.equals("")) {
+            txt_mail.setBackground(Color.red);
+            validacion++;
+        }
+        
+        if (mail.equals("")) {
+            txt_username.setBackground(Color.red);
+            validacion++;
+        }
+        
+        if (mail.equals("")) {
+            txt_password.setBackground(Color.red);
+            validacion++;
+        }
+        
+        if (mail.equals("")) {
+            txt_nombre.setBackground(Color.red);
+            validacion++;
+        }
+        
+        if (mail.equals("")) {
+            txt_télefono.setBackground(Color.red);
+            validacion++;
+        }
+        
+        if (permisos_cmb == 1) {
+            permisos_string = "Administrador";
+        } else if (permisos_cmb == 2) {
+            permisos_string = "Capturista";
+        } else if (permisos_cmb == 3) {
+            permisos_string = "Tecnico";
+        }
+        
+        try {
+            Connection cn = Conexion.conectar();
+            PreparedStatement pst = cn.prepareStatement(
+                    "SELECT username FROM usuarios WHERE username = '" + username + "'");
+            ResultSet rs = pst.executeQuery();
+            
+            if (rs.next()) {
+                txt_username.setBackground(Color.red);
+                JOptionPane.showMessageDialog(null, "Nombre de usuario no disponible.");
+                cn.close();
+            } else {
+                
+                cn.close();
+                
+                if (validacion == 0) {
+                    try {
+                        Connection cn2 = Conexion.conectar();
+                        PreparedStatement pst2 = cn2.prepareStatement(
+                                "INSERT INTO usuarios values (?,?,?,?,?,?,?,?,?)");
+                        
+                        pst2.setInt(1, 0);
+                        pst2.setString(2, nombre);
+                        pst2.setString(3, mail);
+                        pst2.setString(4, telefono);
+                        pst2.setString(5, username);
+                        pst2.setString(6, pass);
+                        pst2.setString(7, permisos_string);
+                        pst2.setString(8, "Activo");
+                        pst2.setString(9, user);
+                        
+                        pst2.executeUpdate();
+                        cn2.close();
+                        Limpiar();
+                        
+                        txt_mail.setBackground(Color.green);
+                        txt_username.setBackground(Color.green);
+                        txt_password.setBackground(Color.green);
+                        txt_nombre.setBackground(Color.green);
+                        txt_télefono.setBackground(Color.green);
+                        
+                        JOptionPane.showMessageDialog(null, "Registro exitoso.");
+                        this.dispose();
+                        
+                    } catch (Exception e) {
+                        System.err.println("Error en regisrar usuario." + e);
+                        JOptionPane.showMessageDialog(null, "¡¡ERROR al registrar!!, contacte al administrador.");
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Debes de llenar todos los campos.");
+                }
+            }
+        } catch (SQLException e) {
+            System.err.println("Error en validar nombre de usuario." + e);
+            JOptionPane.showMessageDialog(null, "¡¡ERROR al comparar usuario!!, contacte al administrador");
+        }
+    }//GEN-LAST:event_jButton1ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -199,4 +309,14 @@ public class RegistrarUsuarios extends javax.swing.JFrame {
     private javax.swing.JTextField txt_télefono;
     private javax.swing.JTextField txt_username;
     // End of variables declaration//GEN-END:variables
+    
+    public void Limpiar() {
+        txt_mail.setText("");
+        txt_nombre.setText("");
+        txt_password.setText("");
+        txt_télefono.setText("");
+        txt_username.setText("");
+        cmb_niveles.setSelectedIndex(0);
+        
+    }
 }
