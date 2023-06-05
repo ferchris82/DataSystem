@@ -150,7 +150,7 @@ public class RegistrarEquipo extends javax.swing.JFrame {
         cmb_tipoequipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laptop", "Desktop", "Impresora", "Multifuncional" }));
         getContentPane().add(cmb_tipoequipo, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 140, -1, -1));
 
-        cmb_marcas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Acer", "Alienware", "Apple ", "Asus", "Dell", "Lenovo", "Hp" }));
+        cmb_marcas.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Acer", "Alienware", "Apple", "Asus", "Brother", "Dell", "Hp", "Lenovo", "Samsung", "Toshiba", "Xerox" }));
         getContentPane().add(cmb_marcas, new org.netbeans.lib.awtextra.AbsoluteConstraints(10, 200, -1, -1));
 
         jButton_Registrar.setBackground(new java.awt.Color(153, 153, 255));

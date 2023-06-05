@@ -12,8 +12,10 @@ import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
 import com.itextpdf.text.Paragraph;
 import java.awt.Image;
+import java.io.FileOutputStream;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 import javax.swing.WindowConstants;
 
 public class Capturista extends javax.swing.JFrame {
@@ -36,30 +38,30 @@ public class Capturista extends javax.swing.JFrame {
         } else {
             setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         }
-        
+
         ImageIcon wallpaper = new ImageIcon("src/images/wallpaperPrincipal.jpg");
         Icon icono = new ImageIcon(wallpaper.getImage().getScaledInstance(jLabel_Wallpaper.getWidth(),
                 jLabel_Wallpaper.getHeight(), Image.SCALE_DEFAULT));
         jLabel_Wallpaper.setIcon(icono);
         this.repaint();
-        
-        try{
+
+        try {
             Connection cn = Conexion.conectar();
             PreparedStatement pst = cn.prepareStatement(
                     "SELECT nombre_usuario FROM usuarios WHERE username = '" + user + "'");
             ResultSet rs = pst.executeQuery();
-            if(rs.next()){
+            if (rs.next()) {
                 nombre_usuario = rs.getString("nombre_usuario");
                 jLabel_NombreUsuario.setText("Bienvenido " + nombre_usuario);
             }
-        }catch(SQLException e){
+        } catch (SQLException e) {
             System.out.println("Error en consultar nombre de capturista.");
         }
 
     }
-    
+
     @Override
-    public Image getIconImage(){
+    public Image getIconImage() {
         Image retValue = getToolkit().getDefaultToolkit().getImage(ClassLoader.getSystemResource("images/icon.png"));
         return retValue;
     }
@@ -108,6 +110,11 @@ public class Capturista extends javax.swing.JFrame {
         getContentPane().add(jButton_GestionarClientes, new org.netbeans.lib.awtextra.AbsoluteConstraints(220, 80, 120, 100));
 
         jButton_Imprimir.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/impresora.png"))); // NOI18N
+        jButton_Imprimir.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_ImprimirActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton_Imprimir, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 80, 120, 100));
 
         jLabel3.setForeground(new java.awt.Color(255, 255, 255));
@@ -139,6 +146,60 @@ public class Capturista extends javax.swing.JFrame {
         GestionarClientes gestionarClientes = new GestionarClientes();
         gestionarClientes.setVisible(true);
     }//GEN-LAST:event_jButton_GestionarClientesActionPerformed
+
+    private void jButton_ImprimirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_ImprimirActionPerformed
+        Document documento = new Document();
+
+        try {
+            String ruta = System.getProperty("user.home");
+            PdfWriter.getInstance(documento, new FileOutputStream(ruta + "/OneDrive/Escritorio/ListaClientes.pdf"));
+
+            //Colocar imagen en el PDF
+            com.itextpdf.text.Image header = com.itextpdf.text.Image.getInstance("src/images/BannerPDF.jpg");
+            header.scaleToFit(650, 1000);
+            header.setAlignment(Chunk.ALIGN_CENTER);
+
+            Paragraph parrafo = new Paragraph();
+            parrafo.setAlignment(Paragraph.ALIGN_CENTER);
+            parrafo.add("Lista de clientes. \n \n");
+            parrafo.setFont(FontFactory.getFont("Tahoma", 18, Font.BOLD, BaseColor.DARK_GRAY));
+
+            documento.open();
+            documento.add(header);
+            documento.add(parrafo);
+
+            PdfPTable tabla = new PdfPTable(5);
+            tabla.addCell("ID");
+            tabla.addCell("Nombre");
+            tabla.addCell("email");
+            tabla.addCell("Télefono");
+            tabla.addCell("Dirección");
+
+            try {
+                Connection cn = Conexion.conectar();
+                PreparedStatement pst = cn.prepareStatement("SELECT * FROM clientes");
+                ResultSet rs = pst.executeQuery();
+
+                if (rs.next()) {
+                    do {
+                        tabla.addCell(rs.getString(1));
+                        tabla.addCell(rs.getString(2));
+                        tabla.addCell(rs.getString(3));
+                        tabla.addCell(rs.getString(4));
+                        tabla.addCell(rs.getString(5));
+
+                    } while (rs.next());
+                    documento.add(tabla);
+                }
+            } catch (SQLException e) {
+                System.err.println("Error al generar lista de clientes." + e);
+            }
+            documento.close();
+            JOptionPane.showMessageDialog(null, "Lista de clientes creada correctamente.");
+        } catch (Exception e) {
+            System.err.println("Error al generar PDF " + e);
+        }
+    }//GEN-LAST:event_jButton_ImprimirActionPerformed
 
     /**
      * @param args the command line arguments

@@ -106,8 +106,8 @@ public class Informacion_Cliente extends javax.swing.JFrame {
 
                 if (fila_point > -1) {
                     IDequipo = (int) model.getValueAt(fila_point, columna_point);
-                    Informacion_Cliente informacion_cliente = new Informacion_Cliente();
-                    informacion_cliente.setVisible(true);
+                    InformacionEquipo informacionEquipo = new InformacionEquipo();
+                    informacionEquipo.setVisible(true);
 
                 }
             }

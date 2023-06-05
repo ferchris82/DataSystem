@@ -114,6 +114,11 @@ public class Administrador extends javax.swing.JFrame {
         getContentPane().add(jButton_Capturista, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 120, 100));
 
         jButton_Tecnico.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/tecnico.png"))); // NOI18N
+        jButton_Tecnico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton_TecnicoActionPerformed(evt);
+            }
+        });
         getContentPane().add(jButton_Tecnico, new org.netbeans.lib.awtextra.AbsoluteConstraints(270, 240, 120, 100));
 
         jButton_AcercaDe.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/geekipedia.png"))); // NOI18N
@@ -164,6 +169,11 @@ public class Administrador extends javax.swing.JFrame {
         Capturista capturista = new Capturista();
         capturista.setVisible(true);
     }//GEN-LAST:event_jButton_CapturistaActionPerformed
+
+    private void jButton_TecnicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_TecnicoActionPerformed
+        Tecnico tecnico = new Tecnico();
+        tecnico.setVisible(true);
+    }//GEN-LAST:event_jButton_TecnicoActionPerformed
 
     /**
      * @param args the command line arguments
