@@ -127,15 +127,18 @@ public class Tecnico extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton_GestionarEquiposActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GestionarEquiposActionPerformed
-        
+        GestionarEquipos gestionarEquipos = new GestionarEquipos();
+        gestionarEquipos.setVisible(true);
     }//GEN-LAST:event_jButton_GestionarEquiposActionPerformed
 
     private void jButton_GráficaEstatusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GráficaEstatusActionPerformed
-        
+        GraficarEstatus graficarEstatus = new GraficarEstatus();
+        graficarEstatus.setVisible(true);
     }//GEN-LAST:event_jButton_GráficaEstatusActionPerformed
 
     private void jButton_GraficaMarcaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton_GraficaMarcaActionPerformed
-        
+        GraficarMarcas graficarMarcas = new GraficarMarcas();
+        graficarMarcas.setVisible(true);
     }//GEN-LAST:event_jButton_GraficaMarcaActionPerformed
 
     /**

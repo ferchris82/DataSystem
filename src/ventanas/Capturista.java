@@ -30,7 +30,7 @@ public class Capturista extends javax.swing.JFrame {
 
         setSize(550, 300);
         setResizable(false);
-        setTitle("Capturista");
+        setTitle("Capturista - Sesión de " + user);
         setLocationRelativeTo(null);
 
         if (sesion_usuario == 1) {
